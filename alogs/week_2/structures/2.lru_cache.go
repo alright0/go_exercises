@@ -2,18 +2,18 @@ package main
 
 import "fmt"
 
-type Node struct {
-	prev  *Node
-	next  *Node
+type NodeLru struct {
+	prev  *NodeLru
+	next  *NodeLru
 	key   int
 	value int
 }
 
 type LruCache struct {
 	capacity int
-	cache    map[int]*Node
-	head     *Node
-	tail     *Node
+	cache    map[int]*NodeLru
+	head     *NodeLru
+	tail     *NodeLru
 }
 
 func (c *LruCache) Get(key int) int {
@@ -39,7 +39,7 @@ func (c *LruCache) Put(key int, value int) {
 		return
 	}
 
-	node = &Node{
+	node = &NodeLru{
 		key:   key,
 		value: value,
 	}
@@ -52,7 +52,7 @@ func (c *LruCache) Put(key int, value int) {
 	c.cache[key] = node
 }
 
-func (c *LruCache) addToTail(node *Node) {
+func (c *LruCache) addToTail(node *NodeLru) {
 	node.next = nil
 	node.prev = c.tail
 
@@ -64,7 +64,7 @@ func (c *LruCache) addToTail(node *Node) {
 		c.tail = node
 	}
 }
-func (c *LruCache) moveToTail(node *Node) {
+func (c *LruCache) moveToTail(node *NodeLru) {
 	if c.tail == node {
 		return
 	}
@@ -84,7 +84,7 @@ func (c *LruCache) moveToTail(node *Node) {
 
 }
 
-func (c *LruCache) remove(node *Node) {
+func (c *LruCache) remove(node *NodeLru) {
 	if c.head == node {
 		c.head = node.next
 	}
@@ -119,7 +119,7 @@ func (c *LruCache) remove(node *Node) {
 func main() {
 	n := LruCache{
 		capacity: 3,
-		cache:    make(map[int]*Node),
+		cache:    make(map[int]*NodeLru),
 		head:     nil,
 		tail:     nil,
 	}
